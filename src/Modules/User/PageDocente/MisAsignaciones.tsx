@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppConfig } from "@/config/app-config";
 
 interface Curso {
@@ -20,6 +21,7 @@ interface Asignacion {
 export default function MisAsignaciones() {
   const [asignaciones, setAsignaciones] = useState<Asignacion[]>([]);
   const [nombreDocente, setNombreDocente] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${AppConfig.API_URL}/mis-asignaciones/`, {
@@ -35,6 +37,10 @@ export default function MisAsignaciones() {
       })
       .catch((err) => console.error("Error cargando asignaciones", err));
   }, []);
+  
+  const handleClick = (cursoId: number, materiaId: number) => {
+    navigate(`/dashboard/evaluaciones/${cursoId}/${materiaId}`);
+  };
 
   return (
     <div className="p-6">
@@ -43,7 +49,11 @@ export default function MisAsignaciones() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {asignaciones.map((asig, index) => (
-          <div key={index} className="border rounded-lg p-4 shadow bg-white dark:bg-zinc-900">
+          <div
+            key={index}
+            onClick={() => handleClick(asig.curso.id, asig.materia.id)}
+            className="cursor-pointer border rounded-lg p-4 shadow bg-white dark:bg-zinc-900 hover:bg-gray-100 dark:hover:bg-zinc-800"
+          >
             <h4 className="text-lg font-semibold mb-1">{asig.materia.nombre}</h4>
             <p className="text-sm text-muted-foreground">
               Curso: {asig.curso.nombre} - {asig.curso.nivel}
