@@ -8,7 +8,7 @@ import { User } from "lucide-react"
 import { AppConfig } from "@/config/app-config"
 
 export function LoginForm() {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
