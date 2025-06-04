@@ -9,7 +9,7 @@ import DashboardLayout from "./app/dashboard/layout";
 import WelcomePage from "./app/dashboard/page";
 
 // Módulos
-import UsersTable from "./Modules/User/Page/userTable";
+// import UsersTable from "./Modules/User/Page/userTable";
 import AlumnoTable from "./Modules/User/PageAlumno/alumnoTable";
 import DocentesTable from "./Modules/User/PageDocente/docenteTable";
 import MateriasTable from "./Modules/core/materiasTable";
@@ -40,7 +40,7 @@ const AppRoutes = () => {
 
               {/* Rutas para DIRECTOR */}
               <Route element={<RoleProtectedRoute role="director" />}>
-                <Route path="usuarios" element={<UsersTable />} />
+                {/* <Route path="usuarios" element={<UsersTable />} /> */}
                 <Route path="alumnos" element={<AlumnoTable />} />
                 <Route path="docentes" element={<DocentesTable />} />
                 <Route path="materias" element={<MateriasTable />} />

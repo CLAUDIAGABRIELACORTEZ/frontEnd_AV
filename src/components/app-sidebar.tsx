@@ -24,7 +24,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: SquareTerminal,
             isActive: true,
             items: [
-              { title: "Usuarios", url: "usuarios" },
+              // { title: "Usuarios", url: "usuarios" },
               { title: "Alumnos", url: "alumnos" },
               { title: "Docentes", url: "docentes" },
             ],
