@@ -30,7 +30,7 @@ import EstadisticasEstudiante from "./Modules/User/PageDocente/EstadisticasEstud
 
 const AppRoutes = () => {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Router>
         <Toaster position="bottom-right" />
 
