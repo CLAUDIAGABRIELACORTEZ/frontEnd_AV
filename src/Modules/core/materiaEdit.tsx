@@ -22,7 +22,12 @@ interface EditMateriaDialogProps {
   } | null;
 }
 
-const EditMateriaDialog: React.FC<EditMateriaDialogProps> = ({ open, onClose, onUpdated, materia }) => {
+const EditMateriaDialog: React.FC<EditMateriaDialogProps> = ({
+  open,
+  onClose,
+  onUpdated,
+  materia,
+}) => {
   const [nombre, setNombre] = useState("");
 
   useEffect(() => {
@@ -38,7 +43,7 @@ const EditMateriaDialog: React.FC<EditMateriaDialogProps> = ({ open, onClose, on
       const response = await fetch(`${AppConfig.API_URL}/materias/${materia.id}/`, {
         method: "PUT",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ nombre }),
@@ -57,9 +62,9 @@ const EditMateriaDialog: React.FC<EditMateriaDialogProps> = ({ open, onClose, on
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-[#F9FCFD]">
         <DialogHeader>
-          <DialogTitle>Editar Materia</DialogTitle>
+          <DialogTitle className="text-[#516D87]">Editar Materia</DialogTitle>
           <DialogDescription>Modifica el nombre de la materia.</DialogDescription>
         </DialogHeader>
 
@@ -72,8 +77,20 @@ const EditMateriaDialog: React.FC<EditMateriaDialogProps> = ({ open, onClose, on
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="default" onClick={handleUpdate}>Guardar cambios</Button>
+          <Button
+            variant="outline"
+            className="border-[#6388A5] text-[#516D87]"
+            onClick={onClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="default"
+            className="bg-[#424C55] hover:bg-[#5C687A] text-white"
+            onClick={handleUpdate}
+          >
+            Guardar cambios
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

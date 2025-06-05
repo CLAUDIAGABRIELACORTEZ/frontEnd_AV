@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+
+import { useState, useMemo, useEffect } from "react";
 import EditableCell from "./EditableCell";
 import { api } from "@/hooks/useApi";
 import { Actividad, AlumnoNotas } from "@/Modules/notas/EvaluacionesPage";
@@ -17,9 +18,10 @@ interface Props {
 
 export default function TablaEvaluaciones({ actividades, alumnos, onNotaGuardada, onAgregarActividad, cursoId, materiaId, trimestre, setActividades }: Props) {
   const dimensiones = ["ser", "saber", "hacer", "decidir"] as const;
-  // const ponderaciones: Record<string, number> = { ser: 5, saber: 45, hacer: 40, decidir: 5 };
 
   const [renderKey, setRenderKey] = useState(0);
+  const [loading, setLoading] = useState(true);
+
   const porDim = useMemo(() => {
     const agrupadas: Record<string, Actividad[]> = {
       ser: [], saber: [], hacer: [], decidir: [],
@@ -28,21 +30,18 @@ export default function TablaEvaluaciones({ actividades, alumnos, onNotaGuardada
     return agrupadas;
   }, [actividades]);
 
+  useEffect(() => {
+    if (actividades.length > 0 || alumnos.length > 0) {
+      setLoading(false);
+    }
+  }, [actividades, alumnos]);
+
   const calcularPromedioDimension = (al: AlumnoNotas, acts: Actividad[]) => {
     if (acts.length === 0) return 0;
     const suma = acts.reduce((acc, act) => acc + (al.notas[act.id.toString()] ?? 0), 0);
     return suma / acts.length;
   };
 
-  // const calcularNotaFinal = (al: AlumnoNotas) => {
-  //   let total = 0;
-  //   for (const dim of dimensiones) {
-  //     const promedio = calcularPromedioDimension(al, porDim[dim]);
-  //     total += promedio * (ponderaciones[dim] / 100);
-  //   }
-  //   total += al.autoevaluacion ?? 0;
-  //   return total;
-  // };
   const calcularNotaFinal = (al: AlumnoNotas) => {
     let total = 0;
     for (const dim of dimensiones) {
@@ -51,7 +50,6 @@ export default function TablaEvaluaciones({ actividades, alumnos, onNotaGuardada
     total += al.autoevaluacion ?? 0;
     return total;
   };
-  
 
   const getColorClass = (total: number) => {
     if (total < 51) return "text-red-600 font-bold";
@@ -77,6 +75,15 @@ export default function TablaEvaluaciones({ actividades, alumnos, onNotaGuardada
     setNuevoTexto("");
     onNotaGuardada();
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-10 space-x-3">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500" />
+        <p className="text-gray-700 font-medium">Cargando notas…</p>
+      </div>
+    );
+  }
 
   return (
     <table key={renderKey} className="min-w-full border text-sm">
@@ -107,8 +114,19 @@ export default function TablaEvaluaciones({ actividades, alumnos, onNotaGuardada
                         value={nuevoTexto}
                         onChange={(e) => setNuevoTexto(e.target.value)}
                         onBlur={() => guardarDescripcion(act.id)}
-                        onKeyDown={(e) => e.key === "Enter" && guardarDescripcion(act.id)}
-                        className="w-full px-1 text-sm border rounded bg-white text-black"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") guardarDescripcion(act.id);
+                          if (e.key === "Escape") {
+                            setEditando(null);
+                            setNuevoTexto("");
+                          }
+                        }}
+                        className="text-sm bg-white text-black border border-gray-400 px-1 py-0.5 rounded-none"
+                        style={{
+                          width: `${Math.max(nuevoTexto.length * 8, 80)}px`,
+                          transition: "width 0.2s ease"
+                        }}
+                        autoFocus
                       />
                     ) : (
                       <span

@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { AppConfig } from "@/config/app-config";
-// import { Asignacion } from "@/types/asignacion";
 
 interface Curso {
   id: number;
@@ -41,7 +40,12 @@ interface EditAsignacionDialogProps {
   asignacion?: Asignacion | null;
 }
 
-const EditAsignacionDialog: React.FC<EditAsignacionDialogProps> = ({ open, onClose, onUpdated, asignacion }) => {
+const EditAsignacionDialog: React.FC<EditAsignacionDialogProps> = ({
+  open,
+  onClose,
+  onUpdated,
+  asignacion,
+}) => {
   const [cursos, setCursos] = useState<Curso[]>([]);
   const [materias, setMaterias] = useState<Materia[]>([]);
   const [docentes, setDocentes] = useState<Docente[]>([]);
@@ -95,13 +99,17 @@ const EditAsignacionDialog: React.FC<EditAsignacionDialogProps> = ({ open, onClo
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-[#F9FCFD]">
         <DialogHeader>
-          <DialogTitle>Editar Asignación</DialogTitle>
+          <DialogTitle className="text-[#516D87]">Editar Asignación</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <select value={form.curso} onChange={(e) => setForm({ ...form, curso: parseInt(e.target.value) })} className="w-full border p-2 rounded">
+          <select
+            value={form.curso}
+            onChange={(e) => setForm({ ...form, curso: parseInt(e.target.value) })}
+            className="w-full border border-[#6388A5] p-2 rounded"
+          >
             <option value="">Selecciona un curso</option>
             {cursos.map((curso) => (
               <option key={curso.id} value={curso.id}>
@@ -110,7 +118,11 @@ const EditAsignacionDialog: React.FC<EditAsignacionDialogProps> = ({ open, onClo
             ))}
           </select>
 
-          <select value={form.materia} onChange={(e) => setForm({ ...form, materia: parseInt(e.target.value) })} className="w-full border p-2 rounded">
+          <select
+            value={form.materia}
+            onChange={(e) => setForm({ ...form, materia: parseInt(e.target.value) })}
+            className="w-full border border-[#6388A5] p-2 rounded"
+          >
             <option value="">Selecciona una materia</option>
             {materias.map((materia) => (
               <option key={materia.id} value={materia.id}>
@@ -119,7 +131,11 @@ const EditAsignacionDialog: React.FC<EditAsignacionDialogProps> = ({ open, onClo
             ))}
           </select>
 
-          <select value={form.docente} onChange={(e) => setForm({ ...form, docente: parseInt(e.target.value) })} className="w-full border p-2 rounded">
+          <select
+            value={form.docente}
+            onChange={(e) => setForm({ ...form, docente: parseInt(e.target.value) })}
+            className="w-full border border-[#6388A5] p-2 rounded"
+          >
             <option value="">Selecciona un docente</option>
             {docentes.map((doc) => (
               <option key={doc.id} value={doc.id}>
@@ -130,8 +146,19 @@ const EditAsignacionDialog: React.FC<EditAsignacionDialogProps> = ({ open, onClo
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleUpdate}>Guardar cambios</Button>
+          <Button
+            variant="outline"
+            className="border-[#6388A5] text-[#516D87]"
+            onClick={onClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            className="bg-[#424C55] hover:bg-[#5C687A] text-white"
+            onClick={handleUpdate}
+          >
+            Guardar cambios
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

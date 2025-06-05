@@ -9,9 +9,14 @@ import DashboardLayout from "./app/dashboard/layout";
 import WelcomePage from "./app/dashboard/page";
 
 // Módulos
-// import UsersTable from "./Modules/User/Page/userTable";
+// ALUMNOS Y DOCENTES
 import AlumnoTable from "./Modules/User/PageAlumno/alumnoTable";
 import DocentesTable from "./Modules/User/PageDocente/docenteTable";
+// import MisEstudiantesTable from "./Modules/User/PageDocente/MisEstudiantesTable";
+// import EstadisticasEstudianteWrapper from "./Modules/User/PageDocente/EstadisticasEstudiante";
+import MisEstudiantesTable from "@/Modules/User/PageDocente/MisEstudiantesTable";
+
+//CORE
 import MateriasTable from "./Modules/core/materiasTable";
 import CursoTable from "./Modules/core/cursoTable";
 import AsignacionesTable from "./Modules/core/asignacionesTable";
@@ -21,6 +26,7 @@ import MisAsignaciones from "./Modules/User/PageDocente/MisAsignaciones";
 import ProtectedRoute from "./routes/ProtectedRuote";
 import RoleProtectedRoute from "./routes/RoleProtectedRoute";
 import EvaluacionesPage from "./Modules/notas/EvaluacionesPage"; 
+import EstadisticasEstudiante from "./Modules/User/PageDocente/EstadisticasEstudiante";
 
 const AppRoutes = () => {
   return (
@@ -51,8 +57,11 @@ const AppRoutes = () => {
               {/* Rutas para DOCENTE */}
               <Route element={<RoleProtectedRoute role="docente" />}>
                 <Route path="mis_asignaciones" element={<MisAsignaciones />} />
-                {/* <Route path="resumen_notas" element={<ResumenNotasTabla />} /> */}
                 <Route path="evaluaciones/:cursoId/:materiaId" element={<EvaluacionesPage />} />
+                <Route path="estadisticas/:alumnoId" element={<EstadisticasEstudiante />} />
+                <Route path="mis-estudiantes" element={<MisEstudiantesTable />} />
+                {/* <Route path="Prediccion" element={<MisEstudiantesTable />} /> */}
+
               </Route>
             </Route>
           </Route>

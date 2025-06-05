@@ -55,20 +55,39 @@ const EditCursoDialog: React.FC<EditCursoDialogProps> = ({ open, onClose, onUpda
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-[#F9FCFD]">
         <DialogHeader>
-          <DialogTitle>Editar Curso</DialogTitle>
+          <DialogTitle className="text-[#516D87]">Editar Curso</DialogTitle>
           <DialogDescription>Modifica los datos del curso seleccionado.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          <Input placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} />
-          <Input placeholder="Nivel" value={form.nivel} onChange={(e) => setForm({ ...form, nivel: e.target.value })} />
+          <Input
+            placeholder="Nombre"
+            value={form.nombre}
+            onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+          />
+          <Input
+            placeholder="Nivel"
+            value={form.nivel}
+            onChange={(e) => setForm({ ...form, nivel: e.target.value })}
+          />
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="default" onClick={handleUpdate}>Guardar cambios</Button>
+          <Button
+            variant="outline"
+            className="border-[#6388A5] text-[#516D87]"
+            onClick={onClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={handleUpdate}
+            className="bg-[#424C55] hover:bg-[#5C687A] text-white"
+          >
+            Guardar cambios
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

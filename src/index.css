@@ -1,69 +1,69 @@
-/* @import "tailwindcss"; */
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
-    --background: 0 100% 98%;
+    --background: 0 0% 98%;
     --foreground: 0 0% 10%;
-    
-    --primary: 0 85% 35%; /* rojo oscuro */
+
+    /* Azul institucional para el colegio */
+    --primary: 215 50% 35%; /* #1D3557 */
     --primary-foreground: 0 0% 100%;
-  
-    --secondary: 0 70% 90%;
-    --secondary-foreground: 0 85% 25%;
-  
-    --muted: 0 65% 95%;
-    --muted-foreground: 0 60% 25%;
-  
-    --accent: 0 80% 50%;
+
+    --secondary: 215 50% 85%;
+    --secondary-foreground: 215 60% 20%;
+
+    --muted: 215 40% 90%;
+    --muted-foreground: 215 25% 30%;
+
+    --accent: 215 65% 45%;
     --accent-foreground: 0 0% 100%;
-  
+
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
-  
-    --border: 0 0% 80%;
-    --input: 0 0% 90%;
-    --ring: 0 85% 35%;
-  
+
+    --border: 215 20% 80%;
+    --input: 215 30% 95%;
+    --ring: 215 50% 35%;
+
     --radius: 0.5rem;
-  
-    --chart-1: 0 90% 60%;
-    --chart-2: 20 90% 50%;
-    --chart-3: 10 70% 40%;
-    --chart-4: 0 70% 70%;
-    --chart-5: 340 80% 65%;
-  
-    --sidebar-background: 0 85% 35%;
+
+    /* Colores para gráficos */
+    --chart-1: 215 90% 60%;
+    --chart-2: 190 90% 50%;
+    --chart-3: 160 70% 45%;
+    --chart-4: 45 90% 60%;
+    --chart-5: 0 80% 60%;
+
+    /* Sidebar */
+    --sidebar-background: 215 50% 35%;         /* igual al encabezado */
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 90% 25%;
+    --sidebar-primary: 215 45% 25%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 60% 40%;
+    --sidebar-accent: 215 60% 45%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 100%;
-    --sidebar-ring: 0 80% 40%;
+    --sidebar-ring: 215 50% 35%;
   }
- 
+
   .dark {
-  --background: 0 0% 10%;
-  --foreground: 0 0% 98%;
+    --background: 215 15% 10%;
+    --foreground: 0 0% 98%;
 
-  --primary: 0 85% 60%;
-  --primary-foreground: 0 0% 100%;
+    --primary: 215 50% 65%;
+    --primary-foreground: 0 0% 100%;
 
-  --sidebar-background: 0 85% 20%;
-  --sidebar-foreground: 0 0% 100%;
-  --sidebar-primary: 0 85% 40%;
-  --sidebar-primary-foreground: 0 0% 100%;
-}
+    --sidebar-background: 215 40% 25%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 215 50% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+  }
 
-}
-@layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

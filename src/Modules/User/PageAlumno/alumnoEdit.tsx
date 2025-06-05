@@ -113,7 +113,7 @@ const EditAlumnoDialog: React.FC<EditAlumnoDialogProps> = ({ open, onClose, onUp
           <Input placeholder="Teléfono" value={form.telefono} onChange={(e) => setForm({ ...form, telefono: e.target.value })} />
 
           <select
-            className="w-full border rounded p-2"
+            className="w-full rounded border border-[#B4CDE6] bg-white p-2 text-sm text-[#1D3557] focus:outline-none focus:ring-2 focus:ring-[#457B9D]"
             value={selectedCurso ?? ''}
             onChange={(e) => setSelectedCurso(Number(e.target.value))}
           >
@@ -127,8 +127,20 @@ const EditAlumnoDialog: React.FC<EditAlumnoDialogProps> = ({ open, onClose, onUp
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="default" onClick={handleUpdate}>Guardar cambios</Button>
+          <Button
+            variant="outline"
+            className="border border-[#A8B6C8] text-[#3B5F82] hover:bg-[#E8F1FA]"
+            onClick={onClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="default"
+            className="bg-[#457B9D] hover:bg-[#35688C] text-white"
+            onClick={handleUpdate}
+          >
+            Guardar cambios
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

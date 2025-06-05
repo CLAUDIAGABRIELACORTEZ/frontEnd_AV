@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { AppConfig } from "@/config/app-config";
@@ -23,9 +30,9 @@ export default function MateriasTable() {
     setLoading(true);
     fetch(`${AppConfig.API_URL}/materias/`, {
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json"
-      }
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then((data: Materia[]) => setMaterias(data))
@@ -62,34 +69,46 @@ export default function MateriasTable() {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Materias</h2>
-        <Button onClick={() => setOpenCreate(true)} variant="default">
+        <h2 className="text-xl font-semibold text-[#516D87]">Materias</h2>
+        <Button className="bg-[#424C55] hover:bg-[#5C687A] text-white" onClick={() => setOpenCreate(true)}>
           <Plus className="w-4 h-4 mr-2" /> Crear Materia
         </Button>
       </div>
 
       {loading ? (
-        <p>Cargando materias...</p>
+        <p className="text-[#516D87]">Cargando materias...</p>
       ) : (
         <Table className="w-full border">
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Nombre</TableHead>
-              <TableHead>Acciones</TableHead>
+              <TableHead className="text-[#424C55]">ID</TableHead>
+              <TableHead className="text-[#424C55]">Nombre</TableHead>
+              <TableHead className="text-[#424C55]">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {materias.map((materia) => (
-              <TableRow key={materia.id}>
+              <TableRow key={materia.id} className="hover:bg-[#F1F7FB]">
                 <TableCell>{materia.id}</TableCell>
                 <TableCell>{materia.nombre}</TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => { setMateriaToEdit(materia); setOpenEdit(true); }}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="border-[#6388A5] text-[#516D87]"
+                      onClick={() => {
+                        setMateriaToEdit(materia);
+                        setOpenEdit(true);
+                      }}
+                    >
                       <Pencil className="w-4 h-4" />
                     </Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(materia.id)}>
+                    <Button
+                      size="sm"
+                      className="bg-[#9AEBDB] hover:bg-[#71ADD8] text-black"
+                      onClick={() => handleDelete(materia.id)}
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>

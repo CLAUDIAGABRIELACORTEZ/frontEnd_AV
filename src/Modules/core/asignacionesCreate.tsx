@@ -73,37 +73,60 @@ export default function CreateAsignacionDialog({ open, onClose, onCreated }: Cre
       onClose();
     } else {
       const error = await res.json();
-      alert(error?.detail || "Error al crear asignación:Ya existe un docente dando esa materia");
+      alert(error?.detail || "Error al crear asignación: Ya existe un docente dando esa materia");
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-[#F9FCFD]">
         <DialogHeader>
-          <DialogTitle>Asignar materia a docente</DialogTitle>
+          <DialogTitle className="text-[#516D87]">Asignar materia a docente</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <select className="w-full border p-2 rounded" value={cursoId ?? ""} onChange={e => setCursoId(Number(e.target.value))}>
+          <select
+            className="w-full border border-[#6388A5] p-2 rounded"
+            value={cursoId ?? ""}
+            onChange={e => setCursoId(Number(e.target.value))}
+          >
             <option value="">Selecciona un curso</option>
             {cursos.map(c => <option key={c.id} value={c.id}>{c.nombre} ({c.nivel})</option>)}
           </select>
 
-          <select className="w-full border p-2 rounded" value={materiaId ?? ""} onChange={e => setMateriaId(Number(e.target.value))}>
+          <select
+            className="w-full border border-[#6388A5] p-2 rounded"
+            value={materiaId ?? ""}
+            onChange={e => setMateriaId(Number(e.target.value))}
+          >
             <option value="">Selecciona una materia</option>
             {materias.map(m => <option key={m.id} value={m.id}>{m.nombre}</option>)}
           </select>
 
-          <select className="w-full border p-2 rounded" value={docenteId ?? ""} onChange={e => setDocenteId(Number(e.target.value))}>
+          <select
+            className="w-full border border-[#6388A5] p-2 rounded"
+            value={docenteId ?? ""}
+            onChange={e => setDocenteId(Number(e.target.value))}
+          >
             <option value="">Selecciona un docente</option>
             {docentes.map(d => <option key={d.id} value={d.id}>{d.nombre} {d.apellido}</option>)}
           </select>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="default" onClick={handleSubmit}>Asignar</Button>
+          <Button
+            variant="outline"
+            className="border-[#6388A5] text-[#516D87]"
+            onClick={onClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            className="bg-[#424C55] hover:bg-[#5C687A] text-white"
+            onClick={handleSubmit}
+          >
+            Asignar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

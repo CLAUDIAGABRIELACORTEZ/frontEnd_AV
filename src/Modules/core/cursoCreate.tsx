@@ -54,20 +54,39 @@ const CreateCursoDialog: React.FC<CreateCursoDialogProps> = ({ open, onClose, on
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-[#F9FCFD]">
         <DialogHeader>
-          <DialogTitle>Registrar Curso</DialogTitle>
+          <DialogTitle className="text-[#516D87]">Registrar Curso</DialogTitle>
           <DialogDescription>Completa los datos para crear un nuevo curso.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          <Input placeholder="Nombre del curso" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} />
-          <Input placeholder="Nivel (Ej: Secundaria)" value={form.nivel} onChange={(e) => setForm({ ...form, nivel: e.target.value })} />
+          <Input
+            placeholder="Nombre del curso"
+            value={form.nombre}
+            onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+          />
+          <Input
+            placeholder="Nivel (Ej: Secundaria)"
+            value={form.nivel}
+            onChange={(e) => setForm({ ...form, nivel: e.target.value })}
+          />
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="default" onClick={handleCreate}>Crear Curso</Button>
+          <Button
+            variant="outline"
+            className="border-[#6388A5] text-[#516D87]"
+            onClick={onClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={handleCreate}
+            className="bg-[#424C55] hover:bg-[#5C687A] text-white"
+          >
+            Crear Curso
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
