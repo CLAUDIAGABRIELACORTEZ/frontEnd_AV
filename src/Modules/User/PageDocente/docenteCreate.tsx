@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,8 +9,14 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+// import { MultiSelect } from "@/components/ui/multi-select"; // Asumimos un componente multiselect existente
 import { toast } from "react-hot-toast";
 import { AppConfig } from "@/config/app-config";
+
+// interface Materia {
+//   id: number;
+//   nombre: string;
+// }
 
 interface CreateDocenteDialogProps {
   open: boolean;
@@ -18,11 +24,9 @@ interface CreateDocenteDialogProps {
   onCreated: () => void;
 }
 
-const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({
-  open,
-  onClose,
-  onCreated,
-}) => {
+const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({ open, onClose, onCreated }) => {
+  // const [materias, setMaterias] = useState<Materia[]>([]);
+  // const [selectedMaterias, setSelectedMaterias] = useState<number[]>([]);
   const [form, setForm] = useState({
     email: "",
     username: "",
@@ -33,13 +37,28 @@ const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({
     password: "",
   });
 
+  // useEffect(() => {
+  //   if (open) {
+  //     fetch(`${AppConfig.API_URL}/materias/`, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data: Materia[]) => setMaterias(data))
+  //       .catch((err) => console.error("Error al cargar materias", err));
+  //   }
+  // }, [open]);
+
   const handleCreate = async () => {
+    // Validación mínima
     if (!form.email || !form.username || !form.password) {
       toast.error("Completa los campos obligatorios");
       return;
     }
 
     try {
+      // 1. Crear usuario con rol docente
       const userResponse = await fetch(`${AppConfig.API_URL}/usuarios/`, {
         method: "POST",
         headers: {
@@ -56,6 +75,7 @@ const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({
 
       const user = await userResponse.json();
 
+      // 2. Crear docente con materias
       const docenteResponse = await fetch(`${AppConfig.API_URL}/docentes/`, {
         method: "POST",
         headers: {
@@ -64,14 +84,15 @@ const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({
         },
         body: JSON.stringify({
           user: user.id,
+          // materias: selectedMaterias,
         }),
       });
 
       if (!docenteResponse.ok) throw new Error("No se pudo registrar al docente");
 
       toast.success("Docente creado exitosamente");
-      onCreated();
-      onClose();
+      onCreated(); // para refrescar lista
+      onClose(); // cerrar modal
       setForm({
         email: "",
         username: "",
@@ -81,6 +102,7 @@ const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({
         telefono: "",
         password: "",
       });
+      // setSelectedMaterias([]);
     } catch (err) {
       console.error(err);
       toast.error("Error al crear docente");
@@ -89,10 +111,10 @@ const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-white rounded-lg shadow-lg text-[#1D3557]">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-[#1D3557] text-xl font-semibold">Registrar Docente</DialogTitle>
-          <DialogDescription className="text-[#457B9D]">Completa los datos para crear un nuevo docente.</DialogDescription>
+          <DialogTitle>Registrar Docente</DialogTitle>
+          <DialogDescription>Completa los datos para crear un nuevo docente.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -103,11 +125,18 @@ const CreateDocenteDialog: React.FC<CreateDocenteDialogProps> = ({
           <Input placeholder="CI" value={form.ci} onChange={(e) => setForm({ ...form, ci: e.target.value })} />
           <Input placeholder="Teléfono" value={form.telefono} onChange={(e) => setForm({ ...form, telefono: e.target.value })} />
           <Input type="password" placeholder="Contraseña" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+
+          {/* <MultiSelect
+            label="Materias"
+            options={materias.map((m) => ({ label: m.nombre, value: m.id.toString() }))}
+            selectedValues={selectedMaterias.map(String)}
+            onChange={(values) => setSelectedMaterias(values.map((v) => parseInt(v)))}
+          /> */}
         </div>
 
         <DialogFooter>
-          <Button variant="outline" className="border-[#A8B6C8] text-[#1D3557]" onClick={onClose}>Cancelar</Button>
-          <Button className="bg-[#457B9D] hover:bg-[#35688C] text-white" onClick={handleCreate}>Crear Docente</Button>
+          <Button variant="outline" onClick={onClose}>Cancelar</Button>
+          <Button variant="default" onClick={handleCreate}>Crear Docente</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

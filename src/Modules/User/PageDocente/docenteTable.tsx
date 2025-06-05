@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus,Pencil,Trash2 } from "lucide-react";
 import { AppConfig } from "@/config/app-config";
 import CreateDocenteDialog from "./docenteCreate";
 import EditDocenteDialog from "./docenteEdit";
@@ -21,6 +14,7 @@ export default function DocentesTable() {
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [docenteToEdit, setDocenteToEdit] = useState<Docente | null>(null);
+  // const [docenteToDelete, setDocenteToDelete] = useState<Docente | null>(null);
 
   const fetchDocentes = () => {
     setLoading(true);
@@ -35,56 +29,52 @@ export default function DocentesTable() {
       .catch((error) => console.error("Error al obtener docentes:", error))
       .finally(() => setLoading(false));
   };
-
+  
   useEffect(() => {
     fetchDocentes();
   }, []);
-
+  
   const handleEditClick = (docente: Docente) => {
     setDocenteToEdit(docente);
     setOpenEdit(true);
   };
-
   const handleDeleteClick = async (docente: Docente) => {
     const confirm = window.confirm(`¿Eliminar al docente ${docente.user.username}?`);
     if (!confirm) return;
-
+  
     try {
       const response = await fetch(`${AppConfig.API_URL}/docentes/${docente.id}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
-
+  
       if (!response.ok) throw new Error("No se pudo eliminar");
-
+  
       toast.success("Docente eliminado correctamente");
-      fetchDocentes();
+      fetchDocentes(); // Refresca lista
     } catch (error) {
       console.error("Error al eliminar:", error);
       toast.error("Error al eliminar docente");
     }
   };
-
+  
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-[#1D3557]">Lista de Docentes</h2>
-        <Button
-          onClick={() => setOpenCreate(true)}
-          className="bg-[#457B9D] hover:bg-[#35688C] text-white"
-        >
+        <h2 className="text-xl font-semibold">Lista de Docentes</h2>
+        <Button onClick={() => setOpenCreate(true)} variant="default">
           <Plus className="w-4 h-4 mr-2" /> Crear Docente
         </Button>
       </div>
-
+  
       {loading ? (
-        <p className="text-[#1D3557]">Cargando docentes...</p>
+        <p>Cargando docentes...</p>
       ) : (
-        <Table className="w-full border border-gray-200 rounded-md shadow-sm">
-          <TableHeader className="bg-[#A8DADC] text-[#1D3557]">
+        <Table className="w-full border">
+          <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>Email</TableHead>
@@ -93,12 +83,14 @@ export default function DocentesTable() {
               <TableHead>Apellido</TableHead>
               <TableHead>CI</TableHead>
               <TableHead>Teléfono</TableHead>
+              {/* <TableHead>Materias</TableHead> */}
               <TableHead>Acciones</TableHead>
+
             </TableRow>
           </TableHeader>
           <TableBody>
             {docentes.map((docente) => (
-              <TableRow key={docente.id} className="hover:bg-[#F1FAFB]">
+              <TableRow key={docente.id}>
                 <TableCell>{docente.id}</TableCell>
                 <TableCell>{docente.user.email}</TableCell>
                 <TableCell>{docente.user.username}</TableCell>
@@ -106,31 +98,34 @@ export default function DocentesTable() {
                 <TableCell>{docente.user.apellido}</TableCell>
                 <TableCell>{docente.user.ci}</TableCell>
                 <TableCell>{docente.user.telefono}</TableCell>
+                {/* <TableCell>
+                  {docente.materias.length > 0
+                    ? docente.materias.map((mat) => mat.nombre).join(", ")
+                    : "Sin materias"}
+                </TableCell> */}
                 <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-[#1D3557] border-[#A8B6C8]"
-                      onClick={() => handleEditClick(docente)}
-                    >
+                  {/* <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => handleEditClick(docente)}>Editar</Button>
+                    <Button size="sm" variant="destructive" onClick={() => handleDeleteClick(docente)}>Eliminar</Button>
+                  </div> */}
+
+                    <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => { handleEditClick(docente); setOpenEdit(true); }}>
                       <Pencil className="w-4 h-4" />
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDeleteClick(docente)}
-                    >
+                    <Button size="sm" variant="destructive" onClick={() => handleDeleteClick(docente)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </TableCell>
+
               </TableRow>
             ))}
           </TableBody>
         </Table>
       )}
-
+  
+      {/* Modal de creación */}
       <CreateDocenteDialog
         open={openCreate}
         onClose={() => setOpenCreate(false)}
@@ -139,8 +134,7 @@ export default function DocentesTable() {
           setOpenCreate(false);
         }}
       />
-
-      <EditDocenteDialog
+      < EditDocenteDialog
         open={openEdit}
         onClose={() => setOpenEdit(false)}
         onUpdated={() => {
@@ -149,6 +143,7 @@ export default function DocentesTable() {
         }}
         docente={docenteToEdit}
       />
+ 
     </div>
-  );
+  );  
 }

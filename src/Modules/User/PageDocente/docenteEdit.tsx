@@ -14,6 +14,7 @@ import { toast } from "react-hot-toast";
 import { AppConfig } from "@/config/app-config";
 import { Docente, Materia } from "@/types/docente";
 
+
 interface EditDocenteDialogProps {
   open: boolean;
   onClose: () => void;
@@ -31,6 +32,7 @@ const EditDocenteDialog: React.FC<EditDocenteDialogProps> = ({ open, onClose, on
     apellido: "",
     ci: "",
     telefono: "",
+    // password: "",
   });
 
   useEffect(() => {
@@ -42,6 +44,7 @@ const EditDocenteDialog: React.FC<EditDocenteDialogProps> = ({ open, onClose, on
         apellido: docente.user.apellido,
         ci: docente.user.ci,
         telefono: docente.user.telefono,
+        // password: "", // no se muestra el actual
       });
 
       setSelectedMaterias(docente.materias.map((m) => m.id));
@@ -65,17 +68,25 @@ const EditDocenteDialog: React.FC<EditDocenteDialogProps> = ({ open, onClose, on
     if (!docente) return;
 
     try {
+      // 1. Actualizar usuario
       const userResponse = await fetch(`${AppConfig.API_URL}/usuarios/${docente.user.id}/`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        // body: JSON.stringify({
+        //   ...form,
+        // //   rol: "docente", // aseguramos que siga siendo docente
+        // //   password: form.password || undefined, // no enviamos si está vacío
+        // }),
+        body: JSON.stringify(form)
+
       });
 
       if (!userResponse.ok) throw new Error("Error actualizando el usuario");
 
+      // 2. Actualizar materias del docente
       const docenteResponse = await fetch(`${AppConfig.API_URL}/docentes/${docente.id}/`, {
         method: "PUT",
         headers: {
@@ -100,10 +111,10 @@ const EditDocenteDialog: React.FC<EditDocenteDialogProps> = ({ open, onClose, on
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-white rounded-lg shadow text-[#1D3557]">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-[#1D3557] text-xl font-semibold">Editar Docente</DialogTitle>
-          <DialogDescription className="text-[#457B9D]">Modifica los datos del docente seleccionado.</DialogDescription>
+          <DialogTitle>Editar Docente</DialogTitle>
+          <DialogDescription>Modifica los datos del docente seleccionado.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -123,8 +134,8 @@ const EditDocenteDialog: React.FC<EditDocenteDialogProps> = ({ open, onClose, on
         </div>
 
         <DialogFooter>
-          <Button variant="outline" className="border-[#A8B6C8] text-[#1D3557]" onClick={onClose}>Cancelar</Button>
-          <Button className="bg-[#457B9D] hover:bg-[#35688C] text-white" onClick={handleUpdate}>Guardar cambios</Button>
+          <Button variant="outline" onClick={onClose}>Cancelar</Button>
+          <Button variant="default" onClick={handleUpdate}>Guardar cambios</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -48,22 +48,22 @@ const CreateAlumnoDialog: React.FC<CreateAlumnoDialogProps> = ({ open, onClose, 
         .catch((err) => console.error("Error al cargar cursos", err));
     }
   }, [open]);
-
-  useEffect(() => {
-    if (open) {
-      // Resetear formulario al abrir
-      setForm({
-        email: "",
-        username: "",
-        nombre: "",
-        apellido: "",
-        ci: "",
-        telefono: "",
-        password: "",
-      });
-      setSelectedCurso(null);
-    }
-  }, [open]);
+ //nueva useeffect
+ useEffect(() => {
+  if (open) {
+    // Resetear formulario al abrir
+    setForm({
+      email: "",
+      username: "",
+      nombre: "",
+      apellido: "",
+      ci: "",
+      telefono: "",
+      password: "",
+    });
+    setSelectedCurso(null);
+  }
+}, [open]);
 
   const handleCreate = async () => {
     if (!form.email || !form.username || !form.password || !selectedCurso) {
@@ -72,7 +72,7 @@ const CreateAlumnoDialog: React.FC<CreateAlumnoDialogProps> = ({ open, onClose, 
     }
 
     try {
-      // Crear usuario
+      // 1. Crear usuario con rol alumno
       const userRes = await fetch(`${AppConfig.API_URL}/usuarios/`, {
         method: "POST",
         headers: {
@@ -83,9 +83,10 @@ const CreateAlumnoDialog: React.FC<CreateAlumnoDialogProps> = ({ open, onClose, 
       });
 
       if (!userRes.ok) throw new Error("No se pudo crear el usuario");
+
       const user = await userRes.json();
 
-      // Crear alumno
+      // 2. Crear alumno
       const alumnoRes = await fetch(`${AppConfig.API_URL}/alumnos/`, {
         method: "POST",
         headers: {
@@ -103,6 +104,16 @@ const CreateAlumnoDialog: React.FC<CreateAlumnoDialogProps> = ({ open, onClose, 
       toast.success("Alumno creado correctamente");
       onCreated();
       onClose();
+      setForm({
+        email: "",
+        username: "",
+        nombre: "",
+        apellido: "",
+        ci: "",
+        telefono: "",
+        password: "",
+      });
+      setSelectedCurso(null);
     } catch (err) {
       console.error(err);
       toast.error("Error al crear alumno");
@@ -127,7 +138,7 @@ const CreateAlumnoDialog: React.FC<CreateAlumnoDialogProps> = ({ open, onClose, 
           <Input type="password" placeholder="Contraseña" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
 
           <select
-            className="w-full rounded border border-[#B4CDE6] bg-white p-2 text-sm text-[#1D3557] focus:outline-none focus:ring-2 focus:ring-[#457B9D]"
+            className="w-full border rounded p-2"
             value={selectedCurso ?? ''}
             onChange={(e) => setSelectedCurso(Number(e.target.value))}
           >
@@ -141,20 +152,8 @@ const CreateAlumnoDialog: React.FC<CreateAlumnoDialogProps> = ({ open, onClose, 
         </div>
 
         <DialogFooter>
-          <Button
-            variant="outline"
-            className="border border-[#A8B6C8] text-[#3B5F82] hover:bg-[#E8F1FA]"
-            onClick={onClose}
-          >
-            Cancelar
-          </Button>
-          <Button
-            variant="default"
-            className="bg-[#457B9D] hover:bg-[#35688C] text-white"
-            onClick={handleCreate}
-          >
-            Crear Alumno
-          </Button>
+          <Button variant="outline" onClick={onClose}>Cancelar</Button>
+          <Button variant="default" onClick={handleCreate}>Crear Alumno</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
